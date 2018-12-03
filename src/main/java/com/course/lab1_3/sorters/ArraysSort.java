@@ -4,11 +4,8 @@ import java.util.Arrays;
 
 public class ArraysSort extends Sorters{
 
-    public ArraysSort(){
-        setSortType("Arrays Sort");
-    }
     @Override
-    public void sortArray(int[] array) {
+    public synchronized void sortArray(int[] array) {
         Arrays.sort(array);
     }
 }

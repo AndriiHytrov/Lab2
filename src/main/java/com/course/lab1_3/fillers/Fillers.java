@@ -1,8 +1,10 @@
 package com.course.lab1_3.fillers;
+import java.lang.annotation.Inherited;
 import java.util.Random;
 
-public abstract class Fillers {
+public class Fillers {
 
+    @AnotationFiller(name = "backwardSortedArray")
     public static int[] backwardSortedArray(int length){
         int[] array = new int[length];
         for(int i = 0; i < array.length; i++){
@@ -11,6 +13,12 @@ public abstract class Fillers {
         return array;
     }
 
+    @Deprecated
+    public void m(){
+
+    }
+
+    @AnotationFiller(name = "randomArray")
     public static int[] randomArray(int length){
         int[] array = new int[length];
         Random random = new Random();
@@ -20,6 +28,7 @@ public abstract class Fillers {
         return array;
     }
 
+    @AnotationFiller(name = "sortedArray")
     public static int[] sortedArray(int length){
         int[] array = new int[length];
         for(int i = 0; i < array.length; i++){
@@ -28,6 +37,7 @@ public abstract class Fillers {
         return array;
     }
 
+    @AnotationFiller(name = "sortedArrayPlusOne")
     public static int[] sortedArrayPlusOne(int length){
         int[] array = new int[length];
         Random random = new Random();

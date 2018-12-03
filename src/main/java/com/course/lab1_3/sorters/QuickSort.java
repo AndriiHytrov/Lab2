@@ -2,13 +2,8 @@ package com.course.lab1_3.sorters;
 
 public class QuickSort extends Sorters{
 
-    public QuickSort(){
-        setSortType("Quick Sort");
-    }
-
-
     @Override
-    public void sortArray(int[] array) {
+    public synchronized void sortArray(int[] array) {
         int startIndex = 0;
         int endIndex = array.length - 1;
         doSort(startIndex, endIndex, array);
