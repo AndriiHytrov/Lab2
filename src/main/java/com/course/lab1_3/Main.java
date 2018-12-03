@@ -26,8 +26,5 @@ public class Main {
         int[] a = {12, 3, 4, 6, 9 , 4, 31, 0, -1};
         Sorters sorters = new MergeQuickSort();
         sorters.sortArray(a);
-        for(int i = 0; i < a.length; i++){
-            System.out.println(a[i]);
-        }
     }
 }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public abstract class ForMerge extends Sorters {
 
-    protected void doMergeSort(int[] array, Sorters sorters){
+    public void doMergeSort(int[] array, Sorters sorters){
         int[] firstSubarray = Arrays.copyOfRange(array, 0, array.length / 2);
         int[] secondSubarray = Arrays.copyOfRange(array, array.length / 2, array.length);
 
