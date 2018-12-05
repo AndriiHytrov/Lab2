@@ -7,6 +7,8 @@ import com.course.lab1_3.sorters.MergeQuickSort;
 import com.course.lab1_3.sorters.Sorters;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -21,10 +23,10 @@ public class Main {
 //        } catch (InvocationTargetException e) {
 //            e.printStackTrace();
 //        }
-
-
-        int[] a = {12, 3, 4, 6, 9 , 4, 31, 0, -1};
+        List<int[]> arraysList = new ArrayList<>();
+        int[] a = Fillers.sortedArray(10);
         Sorters sorters = new MergeQuickSort();
-        sorters.sortArray(a);
+        ((MergeQuickSort) sorters).arrayDivision(a, arraysList, 1);
+        int u = 0;
     }
 }

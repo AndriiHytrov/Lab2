@@ -1,42 +1,61 @@
 package com.course.lab1_3.sorters;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class ForMerge extends Sorters {
 
-    public void doMergeSort(int[] array, Sorters sorters){
-        int[] firstSubarray = Arrays.copyOfRange(array, 0, array.length / 2);
-        int[] secondSubarray = Arrays.copyOfRange(array, array.length / 2, array.length);
+    public void doMergeSort(int[] array, Sorters sorters) {
 
-//        for(int i = 0; i < firstSubarray.length; i++){
-//            System.out.println("f1: " + firstSubarray[i]);
-//        }
-//        for(int i = 0; i < secondSubarray.length; i++){
-//            System.out.println("f2: " + secondSubarray[i]);
-//        }
-        if(Runtime.getRuntime().availableProcessors() < 2){
-            sorters.sortArray(firstSubarray);
-            sorters.sortArray(secondSubarray);
-        }else {
-            Runnable runnable_1 = new SortSubArray(firstSubarray, sorters);
-            Runnable runnable_2 = new SortSubArray(secondSubarray, sorters);
+        int availableProcessors;
+        int minNumberOfProcessors;
+        minNumberOfProcessors = 2;
 
-            Thread thread_1 = new Thread(runnable_1);
-            Thread thread_2 = new Thread(runnable_2);
-
-            thread_1.start();
-            thread_2.start();
+        if (Runtime.getRuntime().availableProcessors() > array.length) {
+            availableProcessors = minNumberOfProcessors;
+        } else {
+            availableProcessors = Runtime.getRuntime().availableProcessors();
         }
-//        for(int i = 0; i < firstSubarray.length; i++){
-//            System.out.println("f1: " + firstSubarray[i]);
-//        }
-//        for(int i = 0; i < secondSubarray.length; i++){
-//            System.out.println("f2: " + secondSubarray[i]);
-//        }
-        doMerge(array, firstSubarray, secondSubarray);
-//        for(int i = 0; i < array.length; i++){
-//            System.out.println("\t\tf3: " + array[i]);
-//        }
+
+        List<int[]> arraysList = new ArrayList<>();
+        arrayDivision(array, arraysList, availableProcessors);
+
+        for (int[] a : arraysList) {
+            new Thread(new SortSubArray(a, sorters)).start();
+        }
+    }
+
+    public void arrayDivision(int[] array, List<int[]> arraysList, int arrayNumber) {
+
+        int procNum = arrayNumber;
+        int[] arr1 = Arrays.copyOfRange(array, 0, array.length / 2);
+        int[] arr2 = Arrays.copyOfRange(array, array.length / 2, array.length);
+        if (arrayNumber > 2) {
+            arrayDivision_1(arr1, arraysList, procNum / 2);
+            arrayDivision_1(arr2, arraysList, procNum - procNum / 2);
+        } else if (arrayNumber == 2){
+            arraysList.add(arr1);
+            arraysList.add(arr2);
+        } else {
+            arraysList.add(array);
+        }
+
+        int e = 0;
+    }
+
+
+    public void arrayDivision_1(int[] array, List<int[]> arraysList, int arrayNumber) {
+        int startIndex = 0;
+        int lastIndex = array.length / arrayNumber;
+
+        for (int i = 1; i < arrayNumber; i++) {
+            arraysList.add(Arrays.copyOfRange(array, startIndex, lastIndex));
+            startIndex += array.length / arrayNumber;
+            lastIndex += array.length / arrayNumber;
+        }
+        arraysList.add(Arrays.copyOfRange(array, startIndex, array.length));
+        int u = 0;
     }
 
     private void doMerge(int[] array, int[] firstSubarray, int[] secondSubarray) {
