@@ -44,7 +44,7 @@ public abstract class ForMerge extends Sorters {
         }
     }
 
-    public void doMerge(List <int[]> arraysList, int[] firstSubarray, int[] secondSubarray) {
+    private void doMerge(List <int[]> arraysList, int[] firstSubarray, int[] secondSubarray) {
 
         int i = 0;
         int j = 0;
