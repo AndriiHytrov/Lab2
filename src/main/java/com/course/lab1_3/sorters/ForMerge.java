@@ -2,15 +2,18 @@ package com.course.lab1_3.sorters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class ForMerge extends Sorters {
 
-    public void doMergeSort(int[] array, Sorters sorters) {
+    int availableProcessors;
+    int minNumberOfProcessors = 2;
+    ArrayDivision arrayDivision = new ArrayDivision();
+    List<int[]> arraysList = new ArrayList<>();
+    List<Thread> threadList = new ArrayList<>();
 
-        int availableProcessors;
-        int minNumberOfProcessors;
-        minNumberOfProcessors = 2;
+    public void doMergeSort(int[] array, Sorters sorters) {
 
         if (Runtime.getRuntime().availableProcessors() > array.length) {
             availableProcessors = minNumberOfProcessors;
@@ -18,50 +21,35 @@ public abstract class ForMerge extends Sorters {
             availableProcessors = Runtime.getRuntime().availableProcessors();
         }
 
-        List<int[]> arraysList = new ArrayList<>();
-        arrayDivision(array, arraysList, availableProcessors);
+        arrayDivision.arrayDivision(array, arraysList, availableProcessors);
+
 
         for (int[] a : arraysList) {
-            new Thread(new SortSubArray(a, sorters)).start();
+            Thread thread = new Thread(new SortSubArray(a, sorters));
+            threadList.add(thread);
+            thread.start();
+        }
+        for(Thread t: threadList){
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        while (arraysList.size() != 1){
+            doMerge(arraysList, arraysList.get(0), arraysList.get(1));
+        }
+        for(int i = 0; i < arraysList.get(0).length; i++){
+            array[i] = arraysList.get(0)[i];
         }
     }
 
-    public void arrayDivision(int[] array, List<int[]> arraysList, int arrayNumber) {
+    public void doMerge(List <int[]> arraysList, int[] firstSubarray, int[] secondSubarray) {
 
-        int procNum = arrayNumber;
-        int[] arr1 = Arrays.copyOfRange(array, 0, array.length / 2);
-        int[] arr2 = Arrays.copyOfRange(array, array.length / 2, array.length);
-        if (arrayNumber > 2) {
-            arrayDivision_1(arr1, arraysList, procNum / 2);
-            arrayDivision_1(arr2, arraysList, procNum - procNum / 2);
-        } else if (arrayNumber == 2){
-            arraysList.add(arr1);
-            arraysList.add(arr2);
-        } else {
-            arraysList.add(array);
-        }
-
-        int e = 0;
-    }
-
-
-    public void arrayDivision_1(int[] array, List<int[]> arraysList, int arrayNumber) {
-        int startIndex = 0;
-        int lastIndex = array.length / arrayNumber;
-
-        for (int i = 1; i < arrayNumber; i++) {
-            arraysList.add(Arrays.copyOfRange(array, startIndex, lastIndex));
-            startIndex += array.length / arrayNumber;
-            lastIndex += array.length / arrayNumber;
-        }
-        arraysList.add(Arrays.copyOfRange(array, startIndex, array.length));
-        int u = 0;
-    }
-
-    private void doMerge(int[] array, int[] firstSubarray, int[] secondSubarray) {
         int i = 0;
         int j = 0;
         int k = 0;
+        int[] array = new int[firstSubarray.length + secondSubarray.length];
 
         while (j < firstSubarray.length && k < secondSubarray.length) {
             if (firstSubarray[j] < secondSubarray[k]) {
@@ -86,5 +74,8 @@ public abstract class ForMerge extends Sorters {
                 k++;
             }
         }
+        arraysList.remove(firstSubarray);
+        arraysList.remove(secondSubarray);
+        arraysList.add(array);
     }
 }

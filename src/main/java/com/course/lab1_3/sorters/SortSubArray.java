@@ -15,8 +15,5 @@ public class SortSubArray implements Runnable {
     @Override
     public void run() {
         sorters.sortArray(array);
-//        for(int i = 0; i < 20; i++){
-//            System.out.println("\t" + i);
-//        }
     }
 }

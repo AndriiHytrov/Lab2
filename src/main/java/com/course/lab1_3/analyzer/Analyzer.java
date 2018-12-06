@@ -10,10 +10,14 @@ public class Analyzer {
 
     public long SortTimeAnalyzer(int[] array, Sorters sorters){
 
+        int[] r;
+        r = array;
         long before = System.nanoTime();
-        sorters.sortArray(array);
+        sorters.sortArray(r);
         long after = System.nanoTime();
-
+        for(int i = 0; i < array.length; i++){
+            System.out.print(r[i] + " ");
+        }
         return after - before;
     }
 }
